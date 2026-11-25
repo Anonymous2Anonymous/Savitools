@@ -141,6 +141,12 @@ describe('redactValue', () => {
     expect(redactValue('sk_live_abc', 'x-api-key')).toBe(REDACTED);
   });
 
+  it('handles nested objects recursively', () => {
+    const obj = { a: { b: { password: 'secretpassword' } } };
+    const res = redactValue(obj) as any;
+    expect(res.a.b.password).toBe(REDACTED);
+  });
+
   it('redacts a string value under authorization key', () => {
     expect(redactValue('Bearer tok', 'authorization')).toBe(REDACTED);
   });
@@ -161,6 +167,14 @@ describe('redactValue', () => {
     // regardless of its type — the key hint takes priority over deep traversal.
     const result = redactValue(['tok1', 'tok2'], 'token');
     expect(result).toBe(REDACTED);
+  });
+
+  it('handles circular references safely without throwing', () => {
+    const circular: any = { name: 'circular' };
+    circular.self = circular;
+    const result = redactValue(circular) as any;
+    expect(result.name).toBe('circular');
+    expect(result.self).toBeDefined();
   });
 
   it('passes through null and undefined', () => {
