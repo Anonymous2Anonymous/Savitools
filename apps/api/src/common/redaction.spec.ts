@@ -143,8 +143,8 @@ describe('redactValue', () => {
 
   it('handles nested objects recursively', () => {
     const obj = { a: { b: { password: 'secretpassword' } } };
-    const res = redactValue(obj) as any;
-    expect(res.a.b.password).toBe(REDACTED);
+    const res = redactValue(obj) as Record<string, unknown>;
+    expect((res.a as Record<string, Record<string, string>>).b.password).toBe(REDACTED);
   });
 
   it('redacts a string value under authorization key', () => {
@@ -156,10 +156,10 @@ describe('redactValue', () => {
       user: 'alice',
       auth: { authorization: 'Bearer tok', userId: 'u1' },
     };
-    const result = redactValue(input) as any;
+    const result = redactValue(input) as Record<string, unknown>;
     expect(result.user).toBe('alice');
-    expect(result.auth.authorization).toBe(REDACTED);
-    expect(result.auth.userId).toBe('u1');
+    expect((result.auth as Record<string, string>).authorization).toBe(REDACTED);
+    expect((result.auth as Record<string, string>).userId).toBe('u1');
   });
 
   it('redacts the whole value when key hint is sensitive (before array traversal)', () => {
@@ -170,9 +170,9 @@ describe('redactValue', () => {
   });
 
   it('handles circular references safely without throwing', () => {
-    const circular: any = { name: 'circular' };
+    const circular: Record<string, unknown> = { name: 'circular' };
     circular.self = circular;
-    const result = redactValue(circular) as any;
+    const result = redactValue(circular) as Record<string, unknown>;
     expect(result.name).toBe('circular');
     expect(result.self).toBeDefined();
   });
