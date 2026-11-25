@@ -63,7 +63,7 @@ describe('qr-handoff', () => {
       const frames = encodeHandoffFrames(samplePayload, 'testnet');
       const tampered = JSON.stringify({ ...frames[0], d: 'tampereddata' });
       expect(() => parseHandoffFrame(tampered)).toThrow('checksum-mismatch');
-  });
+    });
   });
 
   it('collects multi-frame handoffs and successfully reconstructs payload', () => {
@@ -87,7 +87,7 @@ describe('qr-handoff', () => {
     if (result && result.status === 'complete') {
       expect(result.xdr).toBe(longPayload);
     }
-});
+  });
 
   it('handles network mismatch during frame collection', () => {
     const frames = encodeHandoffFrames(samplePayload, 'mainnet');
@@ -99,7 +99,7 @@ describe('qr-handoff', () => {
       expect(result.reason).toBe('network-mismatch');
     }
   });
-    });
+});
 
 
 function buildEnvelope(options: { amount?: string; memo?: string } = {}): string {
@@ -121,7 +121,7 @@ function buildEnvelope(options: { amount?: string; memo?: string } = {}): string
   const transaction = builder.build();
   transaction.sign(source);
   return transaction.toEnvelope().toXDR('base64');
-}
+    }
 
 function signWithExtraKey(envelope: string): string {
   const decoded = TransactionBuilder.fromXDR(envelope, Networks.TESTNET);

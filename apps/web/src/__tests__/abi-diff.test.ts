@@ -6,7 +6,10 @@ describe('abi-diff', () => {
       methods: [
       {
           name: 'transfer',
-          arguments: [{ name: 'to', type: 'Address' }, { name: 'amount', type: 'i128' }],
+          arguments: [
+            { name: 'to', type: 'Address' },
+            { name: 'amount', type: 'i128' },
+          ],
           returnType: 'bool',
         },
         {
@@ -18,7 +21,10 @@ describe('abi-diff', () => {
       events: [
         {
           name: 'Transfer',
-          topics: [{ name: 'from', indexed: true }, { name: 'to', indexed: true }],
+          topics: [
+            { name: 'from', indexed: true },
+            { name: 'to', indexed: true },
+          ],
         },
       ],
     };
@@ -39,7 +45,10 @@ describe('abi-diff', () => {
         // added mint method
         {
           name: 'mint',
-          arguments: [{ name: 'to', type: 'Address' }, { name: 'amount', type: 'i128' }],
+          arguments: [
+            { name: 'to', type: 'Address' },
+            { name: 'amount', type: 'i128' },
+          ],
           returnType: 'Void',
         },
       ],
@@ -47,7 +56,10 @@ describe('abi-diff', () => {
         // Transfer event kept
         {
           name: 'Transfer',
-          topics: [{ name: 'from', indexed: true }, { name: 'to', indexed: true }],
+          topics: [
+            { name: 'from', indexed: true },
+            { name: 'to', indexed: true },
+          ],
         },
         // added Burn event
         {
